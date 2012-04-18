@@ -1,0 +1,121 @@
+#!/bin/sh
+# File Managed by Puppet
+
+# define where orientdb is - this is the directory containing directories log, bin, conf etc
+ORIENTDB_HOME=${ORIENTDB_HOME:-"<%= scope.lookupvar('orientdb::real_orientdb_dir') %>"}
+
+# define the user under which orientdb will run, or use 'RUNASIS' to run as the current user
+ORIENTDB_USER=${ORIENTDB_USER:-"<%= scope.lookupvar('orientdb::process_user') %>"}
+
+# make sure java is in your path
+JAVAPTH=${JAVAPTH:-"/usr/local/jdk/bin"}
+
+# Lock and Pid files
+LOCKFILE=/var/lock/orientdb
+PIDFILE=<%= scope.lookupvar('orientdb::pid_file') %>.pid
+
+if [ "$ORIENTDB_USER" = "RUNASIS" ]; then
+  SUBIT=""
+else
+  SUBIT="su - $ORIENTDB_USER -c "
+fi
+
+if [ -n "$ORIENTDB_CONSOLE" -a ! -d "$ORIENTDB_CONSOLE" ]; then
+  # ensure the file exists
+  touch $ORIENTDB_CONSOLE
+  if [ ! -z "$SUBIT" ]; then
+    chown $ORIENTDB_USER $ORIENTDB_CONSOLE
+  fi 
+fi
+
+if [ -n "$ORIENTDB_CONSOLE" -a ! -f "$ORIENTDB_CONSOLE" ]; then
+  echo "WARNING: location for saving console log invalid: $ORIENTDB_CONSOLE"
+  echo "WARNING: ignoring it and using /dev/null"
+  ORIENTDB_CONSOLE="/dev/null"
+fi
+
+#define what will be done with the console log
+ORIENTDB_CONSOLE=${ORIENTDB_CONSOLE:-"/dev/null"}
+
+# OrientDB Start command
+ORIENTDB_CMD_START="cd $ORIENTDB_HOME/bin; sh $ORIENTDB_HOME/bin/server.sh"
+
+# OrientDB Stop command
+ORIENTDB_CMD_STOP="cd $ORIENTDB_HOME/bin; sh $ORIENTDB_HOME/bin/shutdown.sh"
+
+if [ -z "`echo $PATH | grep $JAVAPTH`" ]; then
+  export PATH=$PATH:$JAVAPTH
+fi
+
+if [ ! -d "$ORIENTDB_HOME" ]; then
+  echo ORIENTDB_HOME does not exist as a valid directory : $ORIENTDB_HOME
+  exit 1
+fi
+
+
+status () {
+  pslist=$( ps -ef | grep java | grep $ORIENTDB_USER | awk '{print $2}' | tr '\n' ' ' | sed -e s/\ $// )
+  if [ -n "$pslist" ]; then
+    echo "orientdb (pid $pslist) is running result: 0"
+    return 0
+  fi
+  if [ -f $PIDFILE ]; then
+    echo "orientdb dead but pid file ( $PIDFILE ) exists result: 1"
+    return 1
+  fi
+  if [ -f $LOCKFILE ]; then
+    echo "orientdb dead but subsys ( $LOCKFILE ) locked result: 2"
+    return 2
+  fi
+  echo "orientdb is stopped result: 3"
+  return 3
+}
+
+start () {
+  if [ -f $LOCKFILE ]; then
+    status
+    exit
+  fi
+  cd $ORIENTDB_HOME/bin
+  echo ORIENTDB_CMD_START = $ORIENTDB_CMD_START
+  if [ -z "$SUBIT" ]; then
+    eval $ORIENTDB_CMD_START >${ORIENTDB_CONSOLE} 2>&1 &
+    if [ "$?" -eq 0 ]; then
+      touch $LOCKFILE
+    fi
+  else
+    $SUBIT "$ORIENTDB_CMD_START >${ORIENTDB_CONSOLE} 2>&1 &"
+    if [ "$?" -eq 0 ]; then
+      touch $LOCKFILE
+    fi
+  fi
+}
+
+stop () {
+  echo ORIENTDB_CMD_STOP = $ORIENTDB_CMD_STOP
+  if [ -z "$SUBIT" ]; then
+    $ORIENTDB_CMD_STOP && rm -f $LOCKFILE
+  else
+    $SUBIT "$ORIENTDB_CMD_STOP" && rm -f $LOCKFILE
+  fi
+}
+
+case "$1" in
+start)
+    start
+    ;;
+stop)
+    stop
+    ;;
+restart)
+    stop
+    sleep 15
+    start
+    ;;
+status)
+    status
+    ;;
+*)
+    echo "usage: $0 (start|stop|restart|status|help)"
+esac
+
