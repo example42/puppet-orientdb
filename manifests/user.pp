@@ -12,7 +12,7 @@ class orientdb::user inherits orientdb {
     ensure     => $orientdb::manage_file,
     comment    => "${orientdb::process_user} user",
     password   => '!',
-    managehome => true,
+    managehome => false,
     home       => $orientdb::real_orientdb_dir,
     shell      => '/bin/bash',
     before     => Group['orientdb'] ,
