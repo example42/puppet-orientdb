@@ -238,6 +238,10 @@
 #   Alessandro Franceschi <al@lab42.it/>
 #
 class orientdb (
+  $root_password       = params_lookup( 'root_password' ),
+  $guest_password      = params_lookup( 'guest_password' ),
+  $replicator_password = params_lookup( 'replicator_password' ),
+  $admin_password      = params_lookup( 'admin_password' ),
   $version             = params_lookup( 'version' ),
   $install             = params_lookup( 'install' ),
   $install_source      = params_lookup( 'install_source' ),
@@ -373,7 +377,7 @@ class orientdb (
   ### Calculations of variables whoe value depends on different params
   $real_install_source = $orientdb::install_source ? {
     ''      => $orientdb::version ? {
-      ''      => 'http://orient.googlecode.com/files/orientdb-1.0rc9.zip',
+      ''      => 'http://orient.googlecode.com/files/orientdb-1.0.1.zip',
       default => "http://orient.googlecode.com/files/orientdb-${orientdb::version}.zip",
     },
     default => $orientdb::install_source,
@@ -409,9 +413,9 @@ class orientdb (
     default => $orientdb::data_dir,
   }
 
-  $real_init_script_template = $jboss::init_script_template ? {
+  $real_init_script_template = $orientdb::init_script_template ? {
     ''      => 'orientdb/orientdb.init.erb',
-    default => $jboss::init_script_template,
+    default => $orientdb::init_script_template,
   }
 
   ### Managed resources

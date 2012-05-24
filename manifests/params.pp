@@ -15,6 +15,10 @@
 class orientdb::params {
 
   ### Module specific parameters
+  $root_password = ''
+  $guest_password = 'guest'
+  $replicator_password = ''
+  $admin_password = 'admin'
   $version = ''
   $install = 'source'
   $install_precommand = ''
