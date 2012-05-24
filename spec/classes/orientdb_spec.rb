@@ -4,7 +4,7 @@ describe 'orientdb' do
 
   let(:title) { 'orientdb' }
   let(:node) { 'rspec.example42.com' }
-  let(:facts) { { :ipaddress => '10.42.42.42' } }
+  let(:facts) { { :ipaddress => '10.42.42.42' , :operatingsystem => 'ubuntu' } }
 
   describe 'Test standard installation via package' do
     let(:params) { {:install => 'package' } }
@@ -170,7 +170,7 @@ describe 'orientdb' do
   end
 
   describe 'Test params lookup' do
-    let(:facts) { { :monitor => true , :ipaddress => '10.42.42.42' } }
+    let(:facts) { { :monitor => true , :ipaddress => '10.42.42.42' , :operatingsystem => 'ubuntu' } }
     let(:params) { { :port => '42' } }
 
     it 'should honour top scope global vars' do
@@ -180,7 +180,7 @@ describe 'orientdb' do
   end
 
   describe 'Test params lookup' do
-    let(:facts) { { :orientdb_monitor => true , :ipaddress => '10.42.42.42' } }
+    let(:facts) { { :orientdb_monitor => true , :ipaddress => '10.42.42.42' , :operatingsystem => 'ubuntu' } }
     let(:params) { { :port => '42' } }
 
     it 'should honour module specific vars' do
@@ -190,7 +190,7 @@ describe 'orientdb' do
   end
 
   describe 'Test params lookup' do
-    let(:facts) { { :monitor => false , :orientdb_monitor => true , :ipaddress => '10.42.42.42' } }
+    let(:facts) { { :monitor => false , :orientdb_monitor => true , :ipaddress => '10.42.42.42' , :operatingsystem => 'ubuntu' } }
     let(:params) { { :port => '42' } }
 
     it 'should honour top scope module specific over global vars' do
@@ -200,7 +200,7 @@ describe 'orientdb' do
   end
 
   describe 'Test params lookup' do
-    let(:facts) { { :monitor => false , :ipaddress => '10.42.42.42' } }
+    let(:facts) { { :monitor => false , :ipaddress => '10.42.42.42' , :operatingsystem => 'ubuntu' } }
     let(:params) { { :monitor => true , :firewall => true, :port => '42' } }
 
     it 'should honour passed params over global vars' do
