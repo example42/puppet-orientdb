@@ -86,7 +86,7 @@ class orientdb::params {
   $my_class = ''
   $source = ''
   $source_dir = ''
-  $source_dir_purge = ''
+  $source_dir_purge = false
   $template = ''
   $options = ''
   $absent = false

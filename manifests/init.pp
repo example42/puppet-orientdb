@@ -450,7 +450,7 @@ class orientdb (
       notify  => $foo::manage_service_autorestart,
       source  => $source_dir,
       recurse => true,
-      purge   => $source_dir_purge,
+      purge   => $orientdb::bool_source_dir_purge,
       replace => $orientdb::manage_file_replace,
       audit   => $orientdb::manage_audit,
     }
