@@ -29,20 +29,20 @@ class orientdb::install inherits orientdb {
       require orientdb::user
 
       # Source zip does not contain a single parent dir :-I
-      file { 'orientdb_dir':
-        ensure => directory ,
-        path   => "${orientdb::real_install_destination}/${created_dirname}" ,
-      }
+      #file { 'orientdb_dir':
+      #  ensure => directory ,
+      #  path   => "${orientdb::real_install_destination}/${created_dirname}" ,
+      #}
 
       puppi::netinstall { 'netinstall_orientdb':
         url                 => $orientdb::real_install_source,
-        destination_dir     => "${orientdb::real_install_destination}/${created_dirname}" ,
+        destination_dir     => "${orientdb::real_install_destination}/" ,
         preextract_command  => $orientdb::install_precommand,
         postextract_command => "chown -R ${orientdb::process_user}:${orientdb::process_user} ${orientdb::real_install_destination}/${created_dirname}",
-        extracted_dir       => 'databases',
+        extracted_dir       => $created_dirname,
         owner               => $orientdb::process_user,
         group               => $orientdb::process_user,
-        require             => [ File['orientdb_dir'] , User[$orientdb::process_user] ],
+        require             => [ User[$orientdb::process_user] ],
       }
 
       file { 'orientdb_link':
