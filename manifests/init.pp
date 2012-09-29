@@ -238,6 +238,7 @@
 #   Alessandro Franceschi <al@lab42.it/>
 #
 class orientdb (
+  $java_opts           = params_lookup( 'java_opts' ),
   $root_password       = params_lookup( 'root_password' ),
   $guest_password      = params_lookup( 'guest_password' ),
   $replicator_password = params_lookup( 'replicator_password' ),

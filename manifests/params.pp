@@ -15,6 +15,7 @@
 class orientdb::params {
 
   ### Module specific parameters
+  $java_opts = ''
   $root_password = ''
   $guest_password = 'guest'
   $replicator_password = ''

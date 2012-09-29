@@ -15,7 +15,6 @@
 # Default-Stop:      0 1 6
 # Short-Description: Start/stop orientdb service
 ### END INIT INFO
-
 # define where orientdb is - this is the directory containing directories log, bin, conf etc
 ORIENTDB_HOME=${ORIENTDB_HOME:-"<%= scope.lookupvar('orientdb::real_orientdb_dir') %>"}
 
@@ -53,10 +52,10 @@ fi
 ORIENTDB_CONSOLE=${ORIENTDB_CONSOLE:-"/dev/null"}
 
 # OrientDB Start command
-ORIENTDB_CMD_START="cd $ORIENTDB_HOME/bin; sh $ORIENTDB_HOME/bin/server.sh"
+ORIENTDB_CMD_START="export JAVA_OPTS='<%= scope.lookupvar('orientdb::java_opts') %>' ; cd $ORIENTDB_HOME/bin; sh $ORIENTDB_HOME/bin/server.sh"
 
 # OrientDB Stop command
-ORIENTDB_CMD_STOP="cd $ORIENTDB_HOME/bin; sh $ORIENTDB_HOME/bin/shutdown.sh"
+ORIENTDB_CMD_STOP="cd $ORIENTDB_HOME/bin; sh $ORIENTDB_HOME/bin/shutdown.sh -w"
 
 if [ -z "`echo $PATH | grep $JAVAPTH`" ]; then
   export PATH=$PATH:$JAVAPTH
