@@ -93,6 +93,7 @@ class orientdb::params {
   $absent = false
   $disable = false
   $disableboot = false
+  $service_autorestart = true
 
   ### General module variables that can have a site or per module default
   $monitor = false

@@ -331,7 +331,7 @@ class orientdb (
   }
 
   $manage_service_autorestart = $orientdb::bool_service_autorestart ? {
-    true    => Service[orientdb],
+    true    => Service['orientdb'],
     false   => undef,
   }
 
@@ -424,7 +424,7 @@ class orientdb (
   require orientdb::install
 
   # Service is managed in a dedicated class
-  require orientdb::service
+  include orientdb::service
 
   if ($orientdb::source or $orientdb::template) {
     file { 'orientdb.conf':
