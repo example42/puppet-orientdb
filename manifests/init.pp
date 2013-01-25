@@ -448,7 +448,7 @@ class orientdb (
       ensure  => directory,
       path    => $orientdb::real_config_dir,
       require => Class['orientdb::install'],
-      notify  => $foo::manage_service_autorestart,
+      notify  => $orientdb::manage_service_autorestart,
       source  => $source_dir,
       recurse => true,
       purge   => $orientdb::bool_source_dir_purge,
