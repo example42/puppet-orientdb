@@ -24,8 +24,8 @@ class orientdb::install inherits orientdb {
 
     source: {
 
-      $created_dirname = url_parse($orientdb::real_install_source,'filedir')
-
+      $created_dirname_full = url_parse($orientdb::real_install_source,'filedir')
+      $created_dirname = regsubst($created_dirname_full,'-distribution','')
       require orientdb::user
 
       # Source zip does not contain a single parent dir :-I
@@ -38,7 +38,7 @@ class orientdb::install inherits orientdb {
         url                 => $orientdb::real_install_source,
         destination_dir     => "${orientdb::real_install_destination}/" ,
         preextract_command  => $orientdb::install_precommand,
-        postextract_command => "chown -R ${orientdb::process_user}:${orientdb::process_user} ${orientdb::real_install_destination}/${created_dirname}",
+        postextract_command => "chown -R ${orientdb::process_user}:${orientdb::process_user} ${orientdb::real_install_destination}/${created_dirname} ; chmod -R g-w,o-w ${orientdb::real_install_destination}/${created_dirname}",
         extracted_dir       => $created_dirname,
         owner               => $orientdb::process_user,
         group               => $orientdb::process_user,

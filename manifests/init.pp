@@ -378,8 +378,8 @@ class orientdb (
   ### Calculations of variables whoe value depends on different params
   $real_install_source = $orientdb::install_source ? {
     ''      => $orientdb::version ? {
-      ''      => 'http://orient.googlecode.com/files/orientdb-1.1.0.zip',
-      default => "http://orient.googlecode.com/files/orientdb-${orientdb::version}.zip",
+      ''      => 'https://oss.sonatype.org/content/repositories/releases/com/orientechnologies/orientdb/1.3.0/orientdb-1.3.0-distribution.zip',
+      default => "https://oss.sonatype.org/content/repositories/releases/com/orientechnologies/orientdb/${orientdb::version}/orientdb-${orientdb::version}-distribution.zip",
     },
     default => $orientdb::install_source,
   }
