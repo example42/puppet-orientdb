@@ -1,11 +1,11 @@
 #!/bin/sh
 # File Managed by Puppet
-<% if operatingsystem == 'RedHat' or operatingsystem == 'CentOS' or operatingsystem == 'Scientific' %>
+<% if @operatingsystem == 'RedHat' or @operatingsystem == 'CentOS' or @operatingsystem == 'Scientific' %>
 # orientdb        Startup script for OrientDB
 #
 # chkconfig: - 85 15
 # description: OrientDB is a NoSQL Graph Database
-<% elsif operatingsystem == 'Debian' or operatingsystem == 'Ubuntu' or operatingsystem == 'Mint' %>
+<% elsif @operatingsystem == 'Debian' or @operatingsystem == 'Ubuntu' or @operatingsystem == 'Mint' %>
 <% end %>
 ### BEGIN INIT INFO
 # Provides:          orientdb
@@ -39,7 +39,7 @@ if [ -n "$ORIENTDB_CONSOLE" -a ! -d "$ORIENTDB_CONSOLE" ]; then
   touch $ORIENTDB_CONSOLE
   if [ ! -z "$SUBIT" ]; then
     chown $ORIENTDB_USER $ORIENTDB_CONSOLE
-  fi 
+  fi
 fi
 
 if [ -n "$ORIENTDB_CONSOLE" -a ! -f "$ORIENTDB_CONSOLE" ]; then
