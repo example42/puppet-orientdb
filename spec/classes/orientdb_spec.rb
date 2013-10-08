@@ -16,7 +16,7 @@ describe 'orientdb' do
     let(:params) { {:version => '1.0' } }
     it 'should install version 1.0 via netinstall' do
       content = catalogue.resource('puppi::netinstall', 'netinstall_orientdb').send(:parameters)[:url]
-      content.should match "http://orient.googlecode.com/files/orientdb-1.0.zip"
+      content.should match "https://oss.sonatype.org/content/repositories/releases/com/orientechnologies/orientdb/1.0/orientdb-1.0-distribution.zip"
     end
   end
 
@@ -24,7 +24,7 @@ describe 'orientdb' do
     let(:params) { {:version => '1.0' , :install => 'puppi' } }
     it 'should install version 1.0 via puppi' do
       content = catalogue.resource('puppi::project::archive', 'orientdb').send(:parameters)[:source]
-      content.should match "http://orient.googlecode.com/files/orientdb-1.0.zip"
+      content.should match "https://oss.sonatype.org/content/repositories/releases/com/orientechnologies/orientdb/1.0/orientdb-1.0-distribution.zip"
     end
   end
 

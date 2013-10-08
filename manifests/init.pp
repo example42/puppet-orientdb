@@ -389,7 +389,7 @@ class orientdb (
     default => $orientdb::install_destination,
   }
 
-  $real_orientdb_dir = "$real_install_destination/orientdb"
+  $real_orientdb_dir = "${real_install_destination}/orientdb"
 
   $real_config_file = $orientdb::config_file ? {
     ''      => "${orientdb::real_orientdb_dir}/config/orientdb-server-config.xml",
